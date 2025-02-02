@@ -1,0 +1,26 @@
+// Power Query Find and Replace based on values ​​in another table
+// Created By: Szilárd Kantor szilard.kantor@gmail.com
+
+/** 
+ * Finds and replaces values ​​in one table based on values ​​in another table.
+ * @param {table} InputTable The table (state) in which we want to exchange values.
+ * @param {text} WithInColumnName The name of the column in which we want to replace the values.
+ * @param {table} FindAndReplaceTable The table that contains the values ​​to be found and replaced.
+ * @param {null|blank|text} FindColumnName The name of the column that contains the values ​​you are looking for. The default value if left blank is: Find
+ * @param {null|blank|text} ReplaceColumnName The name of the column that contains the replacement values. The default value if left blank is: Replace
+ * @returns {table} A table containing the exchanged values.
+ */
+
+let
+    FindAndReplace = (InputTable as table, WithInColumnName as text, FindAndReplaceTable as table, optional FindColumnName as text, optional ReplaceColumnName as text ) as table	=> let
+    getFindColumnName = if FindColumnName = null or FindColumnName = "" then FindAndReplaceTable[Find] else Table.Column(FindAndReplaceTable, FindColumnName), 
+    getReplaceColumnName = if ReplaceColumnName = null or ReplaceColumnName = "" then FindAndReplaceTable[Replace] else Table.Column(FindAndReplaceTable, ReplaceColumnName), 
+    Result = List.Accumulate(
+                 {0..List.Count(getFindColumnName) - 1}, 
+                 InputTable, 
+                 (state, current) => Table.ReplaceValue(state, getFindColumnName{current}, getReplaceColumnName{current}, Replacer.ReplaceText, {WithInColumnName})
+                 )
+    in
+        Result 
+in
+    FindAndReplace
