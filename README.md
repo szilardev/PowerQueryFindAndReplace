@@ -11,5 +11,5 @@ Possible parameters, their types and accepted values.
 + **InputTable** - table
 + **WithInColumnName** - text
 + **FindAndReplaceTable** - table
-+ **FindColumnName** (optional) - text
-+ **ReplaceColumnName** (optional) - text
++ **FindColumnName** (optional) - text - Default value: Find
++ **ReplaceColumnName** (optional) - text - Default value: Replace 
